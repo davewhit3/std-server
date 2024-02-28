@@ -1,2 +1,2 @@
 # std-server
-Dummy Golang server based on routing from version 1.21 features
+Dummy Golang server based on routing from version 1.22 features
