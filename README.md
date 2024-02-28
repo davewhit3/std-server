@@ -21,6 +21,16 @@ Docker:
 docker run --rm -w /app -v `pwd`:/app -p 8080:8080 golang:1.22.0 make run
 ```
 
+## Tests
+```bash
+make test
+```
+
+### Coverage
+```bash
+make coverage
+```
+
 ## Build
 ```bash
 make build

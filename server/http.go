@@ -19,12 +19,17 @@ import (
 	stdmiddleware "github.com/slok/go-http-metrics/middleware/std"
 )
 
-type RegisterControllerHandler func(srv *http.ServeMux)
+type RegisterController interface {
+	HandleFunc(pattern string, handler func(http.ResponseWriter, *http.Request))
+}
+
+type RegisterControllerHandler func(srv RegisterController)
 
 type Server interface {
 	Run(ctx context.Context) error
 	RegisterController(RegisterControllerHandler)
 	RegisterHandler(handler http.Handler)
+	Close() error
 }
 
 var _ Server = (*httpServer)(nil)
@@ -94,6 +99,14 @@ func (s *httpServer) Run(ctx context.Context) error {
 
 	s.log.Info("server exited properly")
 	return nil
+}
+
+func (s httpServer) Close() error {
+	go func() {
+		s.doneCh <- struct{}{}
+	}()
+
+	return s.srv.Close()
 }
 
 func (s httpServer) waitShootDown(duration time.Duration) {

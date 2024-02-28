@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-func SetupHealthHandlers(srv *http.ServeMux) {
+func SetupHealthHandlers(srv server.RegisterController) {
 	srv.HandleFunc("GET /health", health)
 	srv.HandleFunc("GET /ready", ready)
 }

@@ -23,7 +23,7 @@ var UserData []*model.User = []*model.User{
 	{ID: 7, FirstName: "Sol", LastName: "Keddle", Email: "skeddle6@twitter.com"},
 }
 
-func SetupUserHandlers(srv *http.ServeMux) {
+func SetupUserHandlers(srv server.RegisterController) {
 	srv.HandleFunc("POST /users", createUser)
 	srv.HandleFunc("GET /users", listUsers)
 	srv.HandleFunc("GET /users/{id}", listUser)

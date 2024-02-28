@@ -5,6 +5,12 @@ MAIN_FILE = cmd/main.go
 run:
 	@go run ${MAIN_FILE}
 
+test:
+	@go test ./...
+
+coverage:
+	@go test -cover ./...
+
 clean:
 	@rm -rf ${DIST_DIR}/
 
