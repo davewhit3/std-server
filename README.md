@@ -7,6 +7,10 @@ User management API
 
 - [Go 1.22+](https://go.dev/dl/)
 
+### Setup
+
+Set environments from `.env.dist` file
+
 ## Develop
 
 ### How to run?
