@@ -1,20 +1,15 @@
-COVER_PKG=$$(go list ./... )$
-# cover packages to use as go -coverpkg flag argument, separated by coma
-COVER_PKG_FLAG=$(shell echo ${COVER_PKG} | sed 's/ /,/g')
-REPOSITORY ?=
-SERVICE_NAMESPACE = "go/std-server"
-BRANCH ?= $$(git rev-parse --abbrev-ref HEAD)
-TAG ?= $$(echo $(BRANCH) | tr '/' '-')
-IMAGE = ${REPOSITORY}/${SERVICE_NAMESPACE}:${TAG}
-PLATFORM_SUPPORT_ERROR := $(shell docker build -h 2>/dev/null | grep -q platform; echo $$?)
-PLATFORM_FLAG :=
-ifeq ($(PLATFORM_SUPPORT_ERROR),0)
-	PLATFORM_FLAG += --platform=linux/amd64
-endif
+SERVICE_NAME = "std-server"
+DIST_DIR = dist
+MAIN_FILE = cmd/main.go
 
 run:
-	@go run cmd/main.go
-# build image
-build:
-	@echo "Building ${SERVICE_NAMESPACE}..."
-	@docker image build -t ${IMAGE} . --build-arg http_proxy --build-arg https_proxy ${PLATFORM_FLAG}
+	@go run ${MAIN_FILE}
+
+clean:
+	@rm -rf ${DIST_DIR}/
+
+build: clean
+	@echo "Building ${SERVICE_NAME}..."
+	@go build -o "${DIST_DIR}/${SERVICE_NAME}" -a -tags netgo -ldflags '-w -extldflags "-static"' ${MAIN_FILE}
+	@echo "Dist: ${DIST_DIR}/${SERVICE_NAME}"
+
